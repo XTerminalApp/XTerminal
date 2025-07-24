@@ -1,0 +1,22 @@
+[package]
+name = "axec"
+version = "0.1.0"
+authors = ["AaravLu <demolemon@outlook.at>"]
+edition = "2024"
+
+[profile.dev]
+debug = false
+codegen-units = 16
+
+[profile.release]
+debug = false
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+reqwest = { version = "0.12", features = ["json", "blocking"] }
+rustyline = "16.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# tokio = { version = "1.0", features = ["full"] }
+toml = "0.8"
