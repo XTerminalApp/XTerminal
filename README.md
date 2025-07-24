@@ -80,4 +80,10 @@ Giving the tips about the Tool
 
 排名不分先后
 
+The next generation of hacker competition tools👋!
+Tech Leader @Linus-Shyu
+AI Agent Tech Leader @aaravlu
+TUI Director @polypopopo
+BD Director @bottle010
+
 
