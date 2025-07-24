@@ -82,12 +82,12 @@ Giving the tips about the Tool
 
 The next generation of hacker competition tools👋!
 
-Tech Leader @[Linus-Shyu](https://github.com/Linus-Shyu)
+Tech Leader @[Linus Shyu](https://github.com/Linus-Shyu)
 
-AI Agent Tech Leader @aaravlu
+AI Agent Tech Leader @[Yiming Lu](https://github.com/aaravlu)
 
-TUI Director @polypopopo
+TUI Director @[polypopopo](https://github.com/polypopopo)
 
-BD Director @bottle010
+BD Director @[Bottle010](https://github.com/bottle010)
 
 
