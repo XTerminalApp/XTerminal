@@ -82,7 +82,7 @@ Giving the tips about the Tool
 
 The next generation of hacker competition tools👋!
 
-Tech Leader @Linus-Shyu
+Tech Leader @[Linus-Shyu](https://github.com/Linus-Shyu)
 
 AI Agent Tech Leader @aaravlu
 
