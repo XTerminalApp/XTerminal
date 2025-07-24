@@ -37,7 +37,7 @@ As competitive programmers, we noticed the community doesn't have a fast & easy 
 ### ℹ️ Info
 | Command | Description | 描述 |
 |--------|------------|------|
-| `about` 💖 | Sponsor information | 赞助信息 |
+| `about` 💖 | BNB Coin Sponsor information At the same time, a random NFT image is generated locally| BNB Coin区块链赞助信息，同时在本地生成一张随机的NFT图片 |
 | `exit` 🚪 | Quit the Tool back to Bash | 退出工具，回到Bash界面 |
 | `help` ❓ | Giving the tips about the Tool | 给工具的一些提示信息 |
 
