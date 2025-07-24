@@ -73,7 +73,7 @@ Giving the tips about the Tool
 
 ## Community ｜ 社区
 
-官方X账号: https://x.com/XTerminalApp
+官方X账号:@[XTerminalAPP](https://x.com/XTerminalApp)
 
 
 ## contributer｜贡献者
