@@ -8,15 +8,24 @@ import sys
 from art import text2art
 from PIL import Image, ImageDraw, ImageFont
 import random
+import subprocess
+from rich.markdown import Markdown
+import rich
+from rich.console import Console
+from rich.theme import Theme
+from rich.prompt import Prompt
+
+theme = Theme(
+    {"prompt": "bold #FF6E4A", "agent": "italic #00FFFF", "arrow": "blink yellow"}
+)
+console = Console(theme=theme)
 
 
 def clear_screen():
-    """清空终端屏幕"""
     os.system("cls" if os.name == "nt" else "clear")
 
 
 def get_terminal_width():
-    """获取终端宽度"""
     try:
         return os.get_terminal_size().columns
     except OSError:
@@ -36,7 +45,6 @@ lines = [
 
 
 def visible_length(s):
-    """计算可见字符长度（忽略ANSI颜色代码）"""
     import re
 
     ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
@@ -48,7 +56,6 @@ terminal_width = get_terminal_width()
 
 
 def display_at_position(padding):
-    """在指定位置显示图案"""
     clear_screen()
     for line in lines:
         print(" " * padding + line)
@@ -56,18 +63,15 @@ def display_at_position(padding):
 
 
 try:
-    # 第一阶段：从左到右
     for padding in range(0, terminal_width - max_width + 1):
         display_at_position(padding)
         time.sleep(0.05)
 
-    # 第二阶段：从右到中间
     center_position = (terminal_width - max_width) // 2
     for padding in range(terminal_width - max_width, center_position - 1, -1):
         display_at_position(padding)
         time.sleep(0.05)
 
-    # 最终停在中间位置
     display_at_position(center_position)
 
 except KeyboardInterrupt:
@@ -93,10 +97,13 @@ def get_user_rating(username):
                 for c in contests
             ]
         else:
-            print("Error fetching rating data:", data.get("comment", "Unknown error"))
+            console.print(
+                "[bright_red]Error fetching rating data:[/]",
+                data.get("comment", "Unknown error"),
+            )
             return None
     except Exception as e:
-        print("Error:", e)
+        console.print("[bright_red]Error:[/]", e)
         return None
 
 
@@ -122,11 +129,11 @@ def draw_ascii_chart(data, width=60, height=20):
             if i >= width:
                 break
             if val == y:
-                line.append("●")
+                line.append("[brigth_red]●[/]")
             elif val > y:
-                line.append("│")
+                line.append("[bright_green]│[/]")
             else:
-                line.append(" ")
+                line.append("[bright_white] [/]")
 
         current_rating = int(min_rating + (y / (height - 1)) * range_rating)
         line.append(f" {current_rating}")
@@ -145,36 +152,37 @@ def draw_ascii_chart(data, width=60, height=20):
 def show_rating_history(username):
     rating_data = get_user_rating(username)
     if not rating_data:
-        print(f"Could not fetch rating data for {username}")
+        console.print(f"[bold red]Could not fetch rating data for {username}[/]")
         return
 
-    print(f"\nCodeforces Rating History ({username}):")
-    print("=" * 50)
+    console.print(f"[bright_green]\nCodeforces Rating History ({username}):[/]")
+    console.print("[bright_yellow]=[/]" * 70)
 
     current_rating = rating_data[-1][3]
     max_rating = max(r[3] for r in rating_data)
     min_rating = min(r[3] for r in rating_data)
     contests_count = len(rating_data)
 
-    print(f"Current Rating: {current_rating}")
-    print(f"Highest Rating: {max_rating}")
-    print(f"Lowest Rating: {min_rating}")
-    print(f"Contests Participated: {contests_count}")
-    print("\nRating Chart:")
+    console.print(f"[bright_red]Current Rating: {current_rating}[/]")
+    console.print(f"[bright_green]Highest Rating: {max_rating}[/]")
+    console.print(f"[britht_yellow]Lowest Rating: {min_rating}[/]")
+    console.print(f"[bright_blue]Contests Participated: {contests_count}[/]")
+    console.print("[bright_magenta]\nRating Chart:[/]")
 
     chart = draw_ascii_chart(rating_data)
     if chart:
-        print(chart)
+        console.print(chart)
 
-    print("\nLast 5 Contests:")
+    console.print("[bright_red] \nLast 5 Contests: [/]")
     for contest in rating_data[-5:]:
         date = datetime.fromtimestamp(contest[2]).strftime("%Y-%m-%d")
-        print(f"{date}: {contest[1]} (Rating: {contest[3]})")
+        console.print(f"[bright_green]{date}: {contest[1]} (Rating: {contest[3]})[/]")
 
 
 def main():
     while True:
-        command = input("What would you like to do: ")
+        style = "[bright_green]What[/bright_green] [bright_yellow]you[/bright_yellow] [bright_blue]want to[/bright_blue] [agent]do[/agent] [bright_magenta]➜[bright_magenta] "
+        command = Prompt.ask(style, console=console)
 
         if command == "home":
             webbrowser.open("https://atcoder.jp/")
@@ -262,13 +270,19 @@ int main(void)
                         f.write(cpp_code)
                 os.system(f"nvim /Users/{user}/Desktop/{folder_name}")
             except Exception as e:
-                print(f"Error: {e}\nPlease check your username and try again!")
+                print(
+                    f"[bright_red]Error: {e}\nPlease check your username and try again![/]"
+                )
 
         elif command == "clear":
             os.system("clear")
 
         elif command == "time":
-            print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
+            console.print(
+                time.strftime(
+                    "[bright_red]%Y-%m-%d %H:%M:%S[/]", time.localtime(time.time())
+                )
+            )
 
         elif command == "about":
             print("\033[34m /$$       /$$\033[0m")
@@ -331,7 +345,9 @@ int main(void)
                 print("\033[31mFailed to get the price of BNB\033[0m")
 
         elif command == "exit":
-            confirm = input("Are you sure to close all web pages? (y/n): ")
+            confirm = console.input(
+                "[bright_red]Are you sure to close all web pages? (y/n): [/]"
+            )
             if confirm.lower() == "y":
                 os.system("pkill Google Chrome")
                 break
@@ -339,35 +355,53 @@ int main(void)
                 break
 
         elif command == "help":
-            print("\nAvailable commands:")
-            print("home       - Open AtCoder home page")
-            print("contest    - Open contests page")
-            print("rank       - Open global rankings")
-            print("userdata   - View user profile")
-            print("play       - Open specific contest")
-            print("task       - Open specific problem (a-g)")
-            print("submit     - Open submission page")
-            print("stand      - Open contest standings")
-            print("code       - Create C++ template files for contest")
-            print("clear      - Clear terminal screen")
-            print("time       - Show current time")
-            print("rating     - Show Codeforces rating graph")
-            print("about      - Show about information")
-            print("exit       - Exit the program")
-            print("help       - Show this help message\n")
+            console.print("[bright_yellow]\nAvailable commands:[/]")
+            console.print("[bright_yellow]home       - Open AtCoder home page[/]")
+            console.print("[bright_yellow]contest    - Open contests page[/]")
+            console.print("[bright_yellow]rank       - Open global rankings[/]")
+            console.print("[bright_yellow]userdata   - View user profile[/]")
+            console.print("[bright_yellow]play       - Open specific contest[/]")
+            console.print("[bright_yellow]task       - Open specific problem (a-g)[/]")
+            console.print("[bright_yellow]submit     - Open submission page[/]")
+            console.print("[bright_yellow]stand      - Open contest standings[/]")
+            console.print(
+                "[bright_yellow]code       - Create C++ template files for contest[/]"
+            )
+            console.print("[bright_yellow]clear      - Clear terminal screen[/]")
+            console.print("[bright_yellow]time       - Show current time[/]")
+            console.print("[bright_yellow]rating     - Show Codeforces rating graph[/]")
+            console.print("[bright_yellow]about      - Show about information[/]")
+            console.print("[bright_yellow]exit       - Exit the program[/]")
+            console.print("[bright_yellow]help       - Show this help message\n[/]")
 
         elif command == "rating":
-            username = input("Enter Codeforces username: ")
+            username = console.input("[bright_white]Enter Codeforces username: [/]")
             show_rating_history(username)
 
         elif command.strip() == "":
             continue
 
         elif command == "agent":
-            os.system("ollama run llama3:8b-instruct-q4_0")
+            while True:
+                prompt = "[prompt]Ollama[/prompt] [agent]XTerminal Agent[/agent] [arrow]➜[/arrow] "
+                problem = Prompt.ask(prompt, console=console)
+                process = subprocess.Popen(
+                    ["ollama", "run", "llama3", problem],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    bufsize=1,  # 行缓冲
+                    universal_newlines=True,
+                )
+                for line in process.stdout:
+                    rich.print(Markdown(line), end="")
+                if problem == "quit":
+                    break
 
         else:
-            print("Command not found. Type 'help' for available commands.")
+            console.print(
+                "[cyan]Command not found. Type 'help' for available commands.[/]"
+            )
 
 
 if __name__ == "__main__":
