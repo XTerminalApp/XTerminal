@@ -1,10 +1,10 @@
+use anyhow::anyhow;
+use clap::Parser;
+use llm::LLMModel;
+use rustyline::error::ReadlineError;
 use std::process::Command;
 
-use clap::Parser;
-use llm::{IsLLMRequest, LLMModel, deepseek::DeepSeekRequest};
-use rustyline::{Editor, error::ReadlineError};
-
-use crate::llm::Message;
+use crate::llm::{Message, build_and_send_request, parse_response};
 
 const MESSAGE_BEGIN: &str = "You are a great helper for learning algorithms.";
 pub const READLINE_PROMPT_BASE: &str = "Axec> ";
@@ -13,38 +13,32 @@ pub const RUNNING: &str = "|/-\\";
 pub mod cli;
 pub mod llm;
 
-pub fn run() {
+pub fn run() -> anyhow::Result<String> {
     let cli = cli::Cli::parse().load_config();
     let mut messages = Vec::new();
     messages.push(Message::from_system(MESSAGE_BEGIN));
-    let mut editor = Editor::<(), _>::new().expect("Failed to create editor");
+    let mut editor = rustyline::DefaultEditor::new()?;
     println!("Welcome to Axec!");
 
-    let deepseek = cli.get_deepseek().expect("No deepseek configured");
-    let deepseek_apikey = deepseek
-        .api_key
-        .clone()
-        .expect("No deepseek apikey configured");
+    let general = cli.get().expect("No LLM configured");
+    let model_type: LLMModel = general.model_name.as_str().into();
 
     loop {
         let readline = editor.readline(READLINE_PROMPT_BASE);
         match readline {
             Ok(user_input) => match try_execute(&user_input) {
-                Ok(output) => println!("{}", output),
+                Ok(output) => println!("{output}"),
                 Err(_err) => {
-                    println!("Looks like input is not a valid command, so sent it to LLM\n");
-                    let deepseek_req =
-                        DeepSeekRequest::build(LLMModel::DeepSeekChat, messages.clone(), false);
+                    println!("Looks like input is not a valid command, now sent it to LLM\n");
                     messages.push(Message::from_user(&user_input));
-                    let response = deepseek_req.send_request(&deepseek_apikey, &messages);
-                    let json: serde_json::Value = response.unwrap().json().unwrap();
-                    let llm_reply = json["choices"][0]["message"]["content"].as_str().unwrap();
-                    println!("{}", llm_reply)
+                    let response = build_and_send_request(model_type, &general.api_key, &messages);
+                    let llm_reply = parse_response(model_type, response)?;
+                    println!("{llm_reply}")
                 }
             },
             Err(ReadlineError::Eof) => {
                 println!("Exiting Axec");
-                break;
+                return Err(anyhow!("EOF"));
             }
             Err(_) => {
                 println!("Error reading input");

@@ -7,33 +7,13 @@ use toml;
 // TOML配置文件对应的结构体
 #[derive(Debug, Deserialize)]
 pub struct Config {
-    general: Option<General>,
-    deepseek: Option<Deepseek>,
-    openai: Option<Openai>,
-    claude: Option<Claude>,
+    pub general: General,
 }
 
 #[derive(Debug, Deserialize)]
-struct General {
-    selected: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Deepseek {
-    pub name: Option<String>,
-    pub api_key: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Openai {
-    name: Option<String>,
-    api_key: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Claude {
-    name: Option<String>,
-    api_key: Option<String>,
+pub struct General {
+    pub model_name: String,
+    pub api_key: String,
 }
 
 // Cli结构体，包含Clap字段和配置文件
@@ -61,32 +41,8 @@ impl Cli {
     }
 
     // 获取selected值
-    pub fn get_selected(&self) -> Option<&str> {
-        self.config_data
-            .as_ref()
-            .and_then(|config| config.general.as_ref())
-            .map(|general| general.selected.as_ref())
-    }
-
-    // 获取deepseek配置
-    pub fn get_deepseek(&self) -> Option<&Deepseek> {
-        self.config_data
-            .as_ref()
-            .and_then(|config| config.deepseek.as_ref())
-    }
-
-    // 获取openai配置
-    pub fn get_openai(&self) -> Option<&Openai> {
-        self.config_data
-            .as_ref()
-            .and_then(|config| config.openai.as_ref())
-    }
-
-    // 获取claude配置
-    pub fn get_claude(&self) -> Option<&Claude> {
-        self.config_data
-            .as_ref()
-            .and_then(|config| config.claude.as_ref())
+    pub fn get(&self) -> Option<&General> {
+        self.config_data.as_ref().map(|config| &config.general)
     }
 }
 
@@ -105,15 +61,10 @@ mod tests {
         let config_data: Config =
             toml::from_str(&config_content).unwrap_or_else(|e| panic!("config error: {e}"));
 
-        let selected = config_data
-            .general
-            .as_ref()
-            .map(|general| general.selected.as_str());
-
         assert_eq!(
-            Some("sk-2f2d2bf56d0247a2922f68cc67eea799".to_string()),
-            config_data.deepseek.and_then(|deepseek| deepseek.api_key)
+            "sk-2f2d2bf56d0247a2922f68cc67eea799",
+            config_data.general.api_key
         );
-        assert_eq!(Some("deepseek"), selected);
+        assert_eq!("deepseek-chat", config_data.general.model_name);
     }
 }

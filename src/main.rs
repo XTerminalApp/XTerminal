@@ -1,3 +1,5 @@
 fn main() {
-    axec::run()
+    if let Err(e) = axec::run() {
+        eprintln!("{e}");
+    }
 }

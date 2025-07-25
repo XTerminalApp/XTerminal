@@ -1,5 +1,8 @@
+use anyhow::Ok;
 use reqwest::blocking;
 use serde::Serialize;
+
+use crate::llm::deepseek::DeepSeekRequest;
 
 pub mod claude;
 pub mod deepseek;
@@ -10,9 +13,6 @@ pub const SHELL_HISTORY: &str = "ShellHistory: ";
 pub const NOTES: &str =
     "Notes: Please put the final command in last single line and wrap it with <<>>";
 
-// pub static RESTORED_MESSAGES: LazyLock<RwLock<Vec<Message>>> =
-//     LazyLock::new(|| RwLock::new(Vec::new()));
-
 #[allow(async_fn_in_trait)]
 pub trait IsLLMRequest {
     fn send_request(
@@ -22,7 +22,7 @@ pub trait IsLLMRequest {
     ) -> anyhow::Result<blocking::Response>;
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Copy, Clone, Default, Serialize)]
 pub enum LLMModel {
     #[default]
     #[serde(rename = "deepseek-chat")]
@@ -79,4 +79,35 @@ pub enum Role {
     System,
     #[default]
     User,
+}
+
+// pub trait LLM {
+//     fn get_api_key(&self) -> &str;
+// }
+
+pub fn build_and_send_request(
+    model_type: LLMModel,
+    api_key: &str,
+    messages: &[Message],
+) -> anyhow::Result<blocking::Response> {
+    let response = match model_type {
+        LLMModel::DeepSeekChat | LLMModel::DeepSeekReasoner => {
+            let request = DeepSeekRequest::build(model_type, messages.to_vec(), false);
+            request.send_request(api_key, messages)?
+        } // _ => return Err(anyhow::anyhow!("Unsupported model type")),
+    };
+    Ok(response)
+}
+
+pub fn parse_response(
+    model_type: LLMModel,
+    response: anyhow::Result<blocking::Response>,
+) -> anyhow::Result<String> {
+    let json: serde_json::Value = response?.json()?;
+    let llm_reply = match model_type {
+        LLMModel::DeepSeekChat | LLMModel::DeepSeekReasoner => {
+            json["choices"][0]["message"]["content"].as_str().unwrap()
+        } // _ =>
+    };
+    Ok(llm_reply.to_string())
 }

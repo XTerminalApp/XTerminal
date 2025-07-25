@@ -1,17 +1,3 @@
-# This file is used for tests.
 [general]
-selected = "deepseek"
-
-[deepseek]
-# name = "deepseek-reasoner"
-name = "deepseek-chat"
+model_name = "deepseek-chat"
 api_key = "sk-2f2d2bf56d0247a2922f68cc67eea799"
-
-[openai]
-# name = "gpt-3.5-turbo"
-name = "gpt-4o"
-api_key = ""
-
-[claude]
-name = "claude-3.5"
-api_key = ""
