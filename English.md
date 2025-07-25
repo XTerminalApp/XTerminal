@@ -38,7 +38,7 @@ We pioneered **seamless LLM integration**, freeing AI from network constraints.
 
 ---
 
-### 🚀 The Geek Economy Paradigm: Fuel XTerminal with Crypto**
+### 🚀 The Geek Economy Paradigm: Fuel XTerminal with Crypto
 
 In the true geek realm, currency was never about digital RMB in Alipay or WeChat Pay—**crypto is our native language**.
 

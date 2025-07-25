@@ -1,6 +1,6 @@
 🌟 XTerminal User Guide | XTerminal用户指南
 
-**If you wanna see the English version, please click [here](https://github.com/XTerminal/English.md).**
+**If you wanna see the English version, please click [here](https://github.com/XTerminalApp/XTerminal/blob/main/English.md).**
 
 #### 🚀 XTerminal 用户指南
 
@@ -39,7 +39,7 @@
 
 🤖**无边界AI时代由此开启**🤖
 
-### 🚀 极客经济新范式：用加密货币支持XTerminal\*\*
+### 🚀 极客经济新范式：用加密货币支持XTerminal
 
 在真正的极客世界里，货币早已不是支付宝或微信里的数字人民币——**加密货币才是我们的硬通货**。
 
