@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use clap::Parser;
 use llm::LLMModel;
 use rustyline::error::ReadlineError;
-use std::process::Command;
+use std::{env, process::Command};
 
 use crate::llm::{Message, build_and_send_request, parse_response};
 
@@ -28,7 +28,8 @@ pub fn run() -> anyhow::Result<String> {
         match readline {
             Ok(user_input) => match try_execute(&user_input) {
                 Ok(output) => println!("{output}"),
-                Err(_err) => {
+                Err(err) => {
+                    println!("unknown command: {err}\n");
                     println!("Looks like input is not a valid command, now sent it to LLM\n");
                     messages.push(Message::from_user(&user_input));
                     let response = build_and_send_request(model_type, &general.api_key, &messages);
@@ -47,18 +48,13 @@ pub fn run() -> anyhow::Result<String> {
     }
 }
 
-fn try_execute(line: &str) -> Result<String, String> {
+fn try_execute(line: &str) -> anyhow::Result<String> {
     let parts: Vec<&str> = line.split_whitespace().collect();
     if parts.is_empty() {
-        return Err("Empty command".to_string());
+        return Err(anyhow!("Empty Command"));
     }
-
     let (cmd, args) = parts.split_first().unwrap();
-
-    let output = Command::new(cmd)
-        .args(args)
-        .output()
-        .map_err(|e| format!("Failed to execute command: {e}"))?;
+    let output = Command::new(cmd).args(args).output()?;
 
     Ok(String::from_utf8_lossy(&output.stdout).to_string())
 }
