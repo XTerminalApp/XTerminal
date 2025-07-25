@@ -1,8 +1,10 @@
-use std::fs;
+use std::{env, fs, path::PathBuf};
 
 use clap::Parser;
 use serde::Deserialize;
 use toml;
+
+use crate::DEFAULT_CONFIG;
 
 // TOML配置文件对应的结构体
 #[derive(Debug, Deserialize)]
@@ -14,6 +16,11 @@ pub struct Config {
 pub struct General {
     pub model_name: String,
     pub api_key: String,
+    #[serde(default = "default_stream")]
+    pub stream: bool,
+}
+pub const fn default_stream() -> bool {
+    false
 }
 
 // Cli结构体，包含Clap字段和配置文件
@@ -32,6 +39,17 @@ pub struct Cli {
 impl Cli {
     // 加载和解析TOML配置文件
     pub fn load_config(mut self) -> Self {
+        let config_dir = get_config_dir().unwrap();
+        let config_path = config_dir.join("config.toml");
+
+        if !config_dir.exists() {
+            fs::create_dir_all(config_dir).unwrap()
+        }
+
+        if !config_path.exists() {
+            fs::write(config_path, DEFAULT_CONFIG).unwrap()
+        }
+
         let config_content =
             fs::read_to_string(&self.config).unwrap_or_else(|e| panic!("fail to read file: {e}"));
 
@@ -45,7 +63,17 @@ impl Cli {
         self.config_data.as_ref().map(|config| &config.general)
     }
 }
+fn get_config_dir() -> anyhow::Result<PathBuf> {
+    let path = if cfg!(target_os = "windows") {
+        PathBuf::from(env::var("USERPROFILE")?)
+            .join("AppData")
+            .join("Roaming")
+    } else {
+        PathBuf::from(env::var("HOME")?).join(".config")
+    };
 
+    Ok(path.join("axec"))
+}
 #[cfg(test)]
 mod tests {
     use super::*;

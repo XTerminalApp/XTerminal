@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::llm::{IsLLMRequest, LLMModel, Message};
 
 use reqwest::blocking;
@@ -13,11 +15,12 @@ pub struct DeepSeekRequest {
 }
 impl DeepSeekRequest {
     pub const fn build(model: LLMModel, messages: Vec<Message>, stream: bool) -> Self {
-        let model = match model {
-            LLMModel::DeepSeekChat => model,
-            LLMModel::DeepSeekReasoner => model,
-            // _ => panic!("It is not a DeepSeek model!"),
-        };
+        if matches!(
+            model,
+            LLMModel::Gpt4O | LLMModel::Gpt4 | LLMModel::Gpt4Turbo
+        ) {
+            panic!("Wrong model name");
+        }
         Self {
             model,
             messages,
@@ -26,20 +29,16 @@ impl DeepSeekRequest {
     }
 }
 impl IsLLMRequest for DeepSeekRequest {
-    fn send_request(
-        &self,
-        api_key: &str,
-        messages: &[Message],
-    ) -> anyhow::Result<blocking::Response> {
-        let deepseek_request =
-            DeepSeekRequest::build(Default::default(), messages.to_vec(), Default::default());
-        let client = reqwest::blocking::Client::new();
+    fn send_request(&self, api_key: &str) -> anyhow::Result<blocking::Response> {
+        let client = reqwest::blocking::Client::builder()
+            .timeout(Duration::from_secs(128))
+            .build()?;
 
         let response = client
             .post(DEEPSEEK_ENDPOINT)
             .header("Authorization", format!("Bearer {api_key}"))
             .header("Content-Type", "application/json")
-            .json(&deepseek_request)
+            .json(&self)
             .send()?;
 
         Ok(response)
