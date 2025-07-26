@@ -127,8 +127,6 @@ pub fn parse_response(
     response: anyhow::Result<blocking::Response>,
 ) -> anyhow::Result<String> {
     let json: serde_json::Value = response?.json()?;
-    // let text = response.unwrap().text().unwrap();
-    // println!("{text}");
     let llm_reply = match model_type {
         LLMModel::DeepSeekChat | LLMModel::DeepSeekReasoner => {
             json["choices"][0]["message"]["content"].as_str().unwrap()
@@ -141,5 +139,4 @@ pub fn parse_response(
         }
     };
     Ok(llm_reply.to_string())
-    // Ok("()".to_string())
 }

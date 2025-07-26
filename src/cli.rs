@@ -28,8 +28,8 @@ pub const fn default_stream() -> bool {
 #[command(author, version, about, long_about = None)]
 pub struct Cli {
     /// 可选的配置文件路径
-    #[arg(short, long, default_value = "axec.toml")]
-    config: String,
+    // #[arg(short, long, default_value = "axec.toml")]
+    // config: String,
 
     // 存储解析后的配置文件
     #[clap(skip)]
@@ -47,11 +47,11 @@ impl Cli {
         }
 
         if !config_path.exists() {
-            fs::write(config_path, DEFAULT_CONFIG).unwrap()
+            fs::write(&config_path, DEFAULT_CONFIG).unwrap()
         }
 
         let config_content =
-            fs::read_to_string(&self.config).unwrap_or_else(|e| panic!("fail to read file: {e}"));
+            fs::read_to_string(&config_path).unwrap_or_else(|e| panic!("fail to read file: {e}"));
 
         self.config_data =
             toml::from_str(&config_content).unwrap_or_else(|e| panic!("config error: {e}"));
