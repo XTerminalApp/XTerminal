@@ -386,7 +386,7 @@ int main(void)
                 prompt = "[prompt]Ollama[/prompt] [agent]XTerminal Agent[/agent] [arrow]➜[/arrow] "
                 problem = Prompt.ask(prompt, console=console)
                 process = subprocess.Popen(
-                    ["ollama", "run", "llama3", problem],
+                    ["ollama", "run", "llama3:8b-instruct-q4_0", problem],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     text=True,
