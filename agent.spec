@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['agent.py'],
+    ['/Users/faxinxu/Downloads/XTerminal/agent.py'],
     pathex=[],
     binaries=[],
     datas=[],
