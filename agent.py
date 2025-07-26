@@ -404,14 +404,20 @@ int main(void)
                             rich.print(Markdown(line), end="")
                         if problem == "quit":
                             break
+                elif command == "agent":
+                    os.system("./axec")
+
                 else:
                     console.print("[cyan]Command not found. Type 'help' for available commands.[/]")
 
             except EOFError:  # Ctrl+D
+                console.print("\n[bright_red]Clearing screen...[/]")
+                os.system('cls' if os.name == 'nt' else 'clear')
                 os.system("./axec")
                 continue
             
             except KeyboardInterrupt:  # Ctrl+C
+                os.system("./axec")
                 console.print("\n[bright_red]Clearing screen...[/]")
                 os.system('cls' if os.name == 'nt' else 'clear')
                 continue
