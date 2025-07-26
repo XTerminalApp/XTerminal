@@ -60,25 +60,25 @@ def visible_length(s):
 #     for line in lines:
 #         print(" " * padding + line)
 #     sys.stdout.flush()
-# 
-# 
+#
+#
 # try:
 #     for padding in range(0, terminal_width - max_width + 1):
 #         display_at_position(padding)
 #         time.sleep(0.05)
-# 
+#
 #     center_position = (terminal_width - max_width) // 2
 #     for padding in range(terminal_width - max_width, center_position - 1, -1):
 #         display_at_position(padding)
 #         time.sleep(0.05)
-# 
+#
 #     display_at_position(center_position)
-# 
+#
 # except KeyboardInterrupt:
 #     clear_screen()
 #     for line in lines:
 #         print(line)
-# 
+#
 
 def get_user_rating(username):
     try:
@@ -120,7 +120,8 @@ def draw_ascii_chart(data, width=60, height=20):
     if range_rating == 0:
         range_rating = 1
 
-    normalized = [int((r - min_rating) / range_rating * (height - 1)) for r in ratings]
+    normalized = [int((r - min_rating) / range_rating * (height - 1))
+                  for r in ratings]
 
     chart = []
     for y in range(height - 1, -1, -1):
@@ -152,10 +153,12 @@ def draw_ascii_chart(data, width=60, height=20):
 def show_rating_history(username):
     rating_data = get_user_rating(username)
     if not rating_data:
-        console.print(f"[bold red]Could not fetch rating data for {username}[/]")
+        console.print(
+            f"[bold red]Could not fetch rating data for {username}[/]")
         return
 
-    console.print(f"[bright_green]\nCodeforces Rating History ({username}):[/]")
+    console.print(
+        f"[bright_green]\nCodeforces Rating History ({username}):[/]")
     console.print("[bright_yellow]=[/]" * 70)
 
     current_rating = rating_data[-1][3]
@@ -176,7 +179,8 @@ def show_rating_history(username):
     console.print("[bright_red] \nLast 5 Contests: [/]")
     for contest in rating_data[-5:]:
         date = datetime.fromtimestamp(contest[2]).strftime("%Y-%m-%d")
-        console.print(f"[bright_green]{date}: {contest[1]} (Rating: {contest[3]})[/]")
+        console.print(
+            f"[bright_green]{date}: {contest[1]} (Rating: {contest[3]})[/]")
 
 
 def main():
@@ -201,7 +205,8 @@ def main():
 
                 elif command == "play":
                     contest_name = input("Enter contest name: ")
-                    webbrowser.open(f"https://atcoder.jp/contests/{contest_name}")
+                    webbrowser.open(
+                        f"https://atcoder.jp/contests/{contest_name}")
 
                 elif command == "task":
                     contest_name = input("Enter contest name: ")
@@ -213,11 +218,13 @@ def main():
 
                 elif command == "submit":
                     contest_name = input("Enter contest name: ")
-                    webbrowser.open(f"https://atcoder.jp/contests/{contest_name}/submit")
+                    webbrowser.open(
+                        f"https://atcoder.jp/contests/{contest_name}/submit")
 
                 elif command == "stand":
                     contest_name = input("Enter contest name: ")
-                    webbrowser.open(f"https://atcoder.jp/contests/{contest_name}/standings")
+                    webbrowser.open(
+                        f"https://atcoder.jp/contests/{contest_name}/standings")
 
                 elif command == "code":
                     user = input("Enter your Mac username: ")
@@ -226,7 +233,8 @@ def main():
                         folder_name = input("Enter contest name for folder: ")
                         os.mkdir(folder_name)
                         os.chdir(f"/Users/{user}/Desktop/{folder_name}")
-                        os.system("touch A.cpp B.cpp C.cpp D.cpp E.cpp F.cpp G.cpp")
+                        os.system(
+                            "touch A.cpp B.cpp C.cpp D.cpp E.cpp F.cpp G.cpp")
 
                         cpp_code = """#include <bits/stdc++.h>
 
@@ -282,7 +290,8 @@ int main(void)
                 elif command == "time":
                     console.print(
                         time.strftime(
-                            "[bright_red]%Y-%m-%d %H:%M:%S[/]", time.localtime(time.time())
+                            "[bright_red]%Y-%m-%d %H:%M:%S[/]", time.localtime(
+                                time.time())
                         )
                     )
 
@@ -295,18 +304,23 @@ int main(void)
                     print(
                         "\033[34m| $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$\033[0m"
                     )
-                    print("\033[34m| $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$\033[0m")
-                    print("\033[34m| $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \033[0m")
-                    print("\033[34m|________/|__/|__/  |__/ \\_______/ \\_______/|__/ \033[0m")
+                    print(
+                        "\033[34m| $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$\033[0m")
+                    print(
+                        "\033[34m| $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \033[0m")
+                    print(
+                        "\033[34m|________/|__/|__/  |__/ \\_______/ \\_______/|__/ \033[0m")
 
-                    print("\033[34mWeChat QR code payment to support this project:\033[0m")
+                    print(
+                        "\033[34mWeChat QR code payment to support this project:\033[0m")
                     code = "wxp://f2f08Xmtax1P6TX2gayuRlMjXvgWRIJSXz5TmEnDiWWHgLLc3W7dIqFeUqjb4g8DAPp4"
                     qr = qrcode.QRCode(version=1, box_size=1, border=1)
                     qr.add_data(code)
                     qr.print_ascii()
 
                     print("\033[34mDeveloped by Linus Shyu\033[0m")
-                    print("\033[34mSupport this project to keep it running!\033[0m")
+                    print(
+                        "\033[34mSupport this project to keep it running!\033[0m")
 
                     print(
                         "GitHub Repository: \033[4mhttps://github.com/Linus-Shyu/AT-Tool\033[0m"
@@ -314,7 +328,8 @@ int main(void)
                     print(
                         "Developer Bilibili: \033[4mhttps://space.bilibili.com/411591950\033[0m"
                     )
-                    print("Developer YouTube: \033[4mhttps://www.youtube.com/@LinusShyu\033[0m")
+                    print(
+                        "Developer YouTube: \033[4mhttps://www.youtube.com/@LinusShyu\033[0m")
                     print(" ")
                     print(" ")
                     print("----------------------------------------------------")
@@ -358,28 +373,45 @@ int main(void)
 
                 elif command == "help":
                     console.print("[bright_yellow]\nAvailable commands:[/]")
-                    console.print("[bright_yellow]online   - Open online agent[/]")
-                    console.print("[bright_yellow]agent    - Open local agent[/]")
-                    console.print("[bright_yellow]home       - Open AtCoder home page[/]")
-                    console.print("[bright_yellow]contest    - Open contests page[/]")
-                    console.print("[bright_yellow]rank       - Open global rankings[/]")
-                    console.print("[bright_yellow]userdata   - View user profile[/]")
-                    console.print("[bright_yellow]play       - Open specific contest[/]")
-                    console.print("[bright_yellow]task       - Open specific problem (a-g)[/]")
-                    console.print("[bright_yellow]submit     - Open submission page[/]")
-                    console.print("[bright_yellow]stand      - Open contest standings[/]")
+                    console.print(
+                        "[bright_yellow]online   - Open online agent[/]")
+                    console.print(
+                        "[bright_yellow]agent    - Open local agent[/]")
+                    console.print(
+                        "[bright_yellow]home       - Open AtCoder home page[/]")
+                    console.print(
+                        "[bright_yellow]contest    - Open contests page[/]")
+                    console.print(
+                        "[bright_yellow]rank       - Open global rankings[/]")
+                    console.print(
+                        "[bright_yellow]userdata   - View user profile[/]")
+                    console.print(
+                        "[bright_yellow]play       - Open specific contest[/]")
+                    console.print(
+                        "[bright_yellow]task       - Open specific problem (a-g)[/]")
+                    console.print(
+                        "[bright_yellow]submit     - Open submission page[/]")
+                    console.print(
+                        "[bright_yellow]stand      - Open contest standings[/]")
                     console.print(
                         "[bright_yellow]code       - Create C++ template files for contest[/]"
                     )
-                    console.print("[bright_yellow]clear      - Clear terminal screen[/]")
-                    console.print("[bright_yellow]time       - Show current time[/]")
-                    console.print("[bright_yellow]rating     - Show Codeforces rating graph[/]")
-                    console.print("[bright_yellow]about      - Show about information[/]")
-                    console.print("[bright_yellow]exit       - Exit the program[/]")
-                    console.print("[bright_yellow]help       - Show this help message\n[/]")
+                    console.print(
+                        "[bright_yellow]clear      - Clear terminal screen[/]")
+                    console.print(
+                        "[bright_yellow]time       - Show current time[/]")
+                    console.print(
+                        "[bright_yellow]rating     - Show Codeforces rating graph[/]")
+                    console.print(
+                        "[bright_yellow]about      - Show about information[/]")
+                    console.print(
+                        "[bright_yellow]exit       - Exit the program[/]")
+                    console.print(
+                        "[bright_yellow]help       - Show this help message\n[/]")
 
                 elif command == "rating":
-                    username = console.input("[bright_white]Enter Codeforces username: [/]")
+                    username = console.input(
+                        "[bright_white]Enter Codeforces username: [/]")
                     show_rating_history(username)
 
                 elif command.strip() == "":
@@ -404,23 +436,21 @@ int main(void)
                             rich.print(Markdown(line), end="")
                         if problem == "quit":
                             break
-                elif command == "agent":
+                elif command == "online":
+                    time.sleep(1)
                     os.system("./axec")
 
                 else:
-                    console.print("[cyan]Command not found. Type 'help' for available commands.[/]")
+                    console.print(
+                        "[cyan]Command not found. Type 'help' for available commands.[/]")
 
             except EOFError:  # Ctrl+D
-                console.print("\n[bright_red]Clearing screen...[/]")
-                os.system('cls' if os.name == 'nt' else 'clear')
-                os.system("./axec")
-                continue
-            
+                console.print("\n[bright_red]Exiting program...[/]")
+                sys.exit(0)
+
             except KeyboardInterrupt:  # Ctrl+C
-                os.system("./axec")
-                console.print("\n[bright_red]Clearing screen...[/]")
-                os.system('cls' if os.name == 'nt' else 'clear')
-                continue
+                console.print("\n[bright_red]Exiting program...[/]")
+                sys.exit(0)
 
     except KeyboardInterrupt:  # Outer Ctrl+C handler
         console.print("\n[bright_red]Exiting program...[/]")
