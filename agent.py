@@ -403,7 +403,7 @@ int main(void)
         elif command == "online":
             os.system("./axec")
             time.sleep(1)
-            os.system("python3 '/Users/faxinxu/Downloads/XTerminal/agent.py'")
+            #os.system("python3 '/Users/faxinxu/Downloads/XTerminal/agent.py'")
         else:
             console.print(
                 "[cyan]Command not found. Type 'help' for available commands.[/]"
