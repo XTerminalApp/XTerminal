@@ -90,8 +90,15 @@ pub fn run() -> anyhow::Result<String> {
                 }
             },
             Err(ReadlineError::Eof) => {
-                let exit_text = "Exiting Axec\nBye Bye!";
-                println!("{}", exit_text.yellow().bold());
+                let exit_text = r#"
+                   ██╗  ██╗████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
+                   ╚██╗██╔╝╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
+                    ╚███╔╝    ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
+                    ██╔██╗    ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
+                   ██╔╝ ██╗   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
+                   ╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+                   "#;
+                print_xterminal_gradient(exit_text);
                 process::exit(0)
             }
             Err(ReadlineError::Interrupted) => {
@@ -130,5 +137,27 @@ fn process_algorithm_competition(input: &str) -> String {
         String::from("unknown_algorithm")
     } else {
         ret
+    }
+}
+
+fn print_xterminal_gradient(art: &str) {
+    let lines = art.lines().filter(|l| !l.is_empty());
+    let total_lines = lines.clone().count();
+
+    for (i, line) in lines.enumerate() {
+        let ratio = i as f32 / total_lines as f32;
+        
+        // 红(255,0,0)→黄(255,255,0)→粉(255,105,180)
+        let (r, g, b) = if ratio < 0.5 {
+            // 红到黄阶段 (ratio 0.0-0.5)
+            let sub_ratio = ratio * 2.0;
+            (255, (255.0 * sub_ratio) as u8, 0)
+        } else {
+            // 黄到粉阶段 (ratio 0.5-1.0)
+            let sub_ratio = (ratio - 0.5) * 2.0;
+            (255, (255.0 * (1.0 - sub_ratio * 0.59)) as u8, (111.0 * sub_ratio) as u8)
+        };
+
+        println!("{}", line.truecolor(r, g, b));
     }
 }

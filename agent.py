@@ -180,53 +180,55 @@ def show_rating_history(username):
 
 
 def main():
-    while True:
-        style = "[bright_green]What[/bright_green] [bright_yellow]you[/bright_yellow] [bright_blue]want to[/bright_blue] [agent]do[/agent] [bright_magenta]➜[bright_magenta] "
-        command = Prompt.ask(style, console=console)
-
-        if command == "home":
-            webbrowser.open("https://atcoder.jp/")
-
-        elif command == "contest":
-            webbrowser.open("https://atcoder.jp/contests/")
-
-        elif command == "rank":
-            webbrowser.open("https://atcoder.jp/ranking")
-
-        elif command == "userdata":
-            username = input("Enter your username: ")
-            webbrowser.open(f"https://atcoder.jp/users/{username}")
-
-        elif command == "play":
-            contest_name = input("Enter contest name: ")
-            webbrowser.open(f"https://atcoder.jp/contests/{contest_name}")
-
-        elif command == "task":
-            contest_name = input("Enter contest name: ")
-            task_name = input("Enter task name (a-g): ").lower()
-            if task_name in "abcdefg":
-                webbrowser.open(
-                    f"https://atcoder.jp/contests/{contest_name}/tasks/{contest_name}_{task_name}"
-                )
-
-        elif command == "submit":
-            contest_name = input("Enter contest name: ")
-            webbrowser.open(f"https://atcoder.jp/contests/{contest_name}/submit")
-
-        elif command == "stand":
-            contest_name = input("Enter contest name: ")
-            webbrowser.open(f"https://atcoder.jp/contests/{contest_name}/standings")
-
-        elif command == "code":
-            user = input("Enter your Mac username: ")
+    try:
+        while True:
+            style = "Axec>"
             try:
-                os.chdir(f"/Users/{user}/Desktop")
-                folder_name = input("Enter contest name for folder: ")
-                os.mkdir(folder_name)
-                os.chdir(f"/Users/{user}/Desktop/{folder_name}")
-                os.system("touch A.cpp B.cpp C.cpp D.cpp E.cpp F.cpp G.cpp")
+                command = Prompt.ask(style, console=console)
 
-                cpp_code = """#include <bits/stdc++.h>
+                if command == "home":
+                    webbrowser.open("https://atcoder.jp/")
+
+                elif command == "contest":
+                    webbrowser.open("https://atcoder.jp/contests/")
+
+                elif command == "rank":
+                    webbrowser.open("https://atcoder.jp/ranking")
+
+                elif command == "userdata":
+                    username = input("Enter your username: ")
+                    webbrowser.open(f"https://atcoder.jp/users/{username}")
+
+                elif command == "play":
+                    contest_name = input("Enter contest name: ")
+                    webbrowser.open(f"https://atcoder.jp/contests/{contest_name}")
+
+                elif command == "task":
+                    contest_name = input("Enter contest name: ")
+                    task_name = input("Enter task name (a-g): ").lower()
+                    if task_name in "abcdefg":
+                        webbrowser.open(
+                            f"https://atcoder.jp/contests/{contest_name}/tasks/{contest_name}_{task_name}"
+                        )
+
+                elif command == "submit":
+                    contest_name = input("Enter contest name: ")
+                    webbrowser.open(f"https://atcoder.jp/contests/{contest_name}/submit")
+
+                elif command == "stand":
+                    contest_name = input("Enter contest name: ")
+                    webbrowser.open(f"https://atcoder.jp/contests/{contest_name}/standings")
+
+                elif command == "code":
+                    user = input("Enter your Mac username: ")
+                    try:
+                        os.chdir(f"/Users/{user}/Desktop")
+                        folder_name = input("Enter contest name for folder: ")
+                        os.mkdir(folder_name)
+                        os.chdir(f"/Users/{user}/Desktop/{folder_name}")
+                        os.system("touch A.cpp B.cpp C.cpp D.cpp E.cpp F.cpp G.cpp")
+
+                        cpp_code = """#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -240,7 +242,7 @@ typedef long l;
 
 void solve()
 {
-  
+
 }
 
 int main(void)
@@ -257,157 +259,167 @@ int main(void)
     return 0;
 }
 """
-                for filename in [
-                    "A.cpp",
-                    "B.cpp",
-                    "C.cpp",
-                    "D.cpp",
-                    "E.cpp",
-                    "F.cpp",
-                    "G.cpp",
-                ]:
-                    with open(filename, "w") as f:
-                        f.write(cpp_code)
-                os.system(f"nvim /Users/{user}/Desktop/{folder_name}")
-            except Exception as e:
-                print(
-                    f"[bright_red]Error: {e}\nPlease check your username and try again![/]"
-                )
+                        for filename in [
+                            "A.cpp",
+                            "B.cpp",
+                            "C.cpp",
+                            "D.cpp",
+                            "E.cpp",
+                            "F.cpp",
+                            "G.cpp",
+                        ]:
+                            with open(filename, "w") as f:
+                                f.write(cpp_code)
+                        os.system(f"nvim /Users/{user}/Desktop/{folder_name}")
+                    except Exception as e:
+                        print(
+                            f"[bright_red]Error: {e}\nPlease check your username and try again![/]"
+                        )
 
-        elif command == "clear":
-            os.system("clear")
+                elif command == "clear":
+                    os.system("clear")
 
-        elif command == "time":
-            console.print(
-                time.strftime(
-                    "[bright_red]%Y-%m-%d %H:%M:%S[/]", time.localtime(time.time())
-                )
-            )
+                elif command == "time":
+                    console.print(
+                        time.strftime(
+                            "[bright_red]%Y-%m-%d %H:%M:%S[/]", time.localtime(time.time())
+                        )
+                    )
 
-        elif command == "about":
-            print("\033[34m /$$       /$$\033[0m")
-            print("\033[34m| $$      |__/\033[0m")
-            print(
-                "\033[34m| $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ \033[0m"
-            )
-            print(
-                "\033[34m| $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$\033[0m"
-            )
-            print("\033[34m| $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$\033[0m")
-            print("\033[34m| $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \033[0m")
-            print("\033[34m|________/|__/|__/  |__/ \\_______/ \\_______/|__/ \033[0m")
+                elif command == "about":
+                    print("\033[34m /$$       /$$\033[0m")
+                    print("\033[34m| $$      |__/\033[0m")
+                    print(
+                        "\033[34m| $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ \033[0m"
+                    )
+                    print(
+                        "\033[34m| $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$\033[0m"
+                    )
+                    print("\033[34m| $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$\033[0m")
+                    print("\033[34m| $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \033[0m")
+                    print("\033[34m|________/|__/|__/  |__/ \\_______/ \\_______/|__/ \033[0m")
 
-            print("\033[34mWeChat QR code payment to support this project:\033[0m")
-            code = "wxp://f2f08Xmtax1P6TX2gayuRlMjXvgWRIJSXz5TmEnDiWWHgLLc3W7dIqFeUqjb4g8DAPp4"
-            qr = qrcode.QRCode(version=1, box_size=1, border=1)
-            qr.add_data(code)
-            qr.print_ascii()
+                    print("\033[34mWeChat QR code payment to support this project:\033[0m")
+                    code = "wxp://f2f08Xmtax1P6TX2gayuRlMjXvgWRIJSXz5TmEnDiWWHgLLc3W7dIqFeUqjb4g8DAPp4"
+                    qr = qrcode.QRCode(version=1, box_size=1, border=1)
+                    qr.add_data(code)
+                    qr.print_ascii()
 
-            print("\033[34mDeveloped by Linus Shyu\033[0m")
-            print("\033[34mSupport this project to keep it running!\033[0m")
+                    print("\033[34mDeveloped by Linus Shyu\033[0m")
+                    print("\033[34mSupport this project to keep it running!\033[0m")
 
-            print(
-                "GitHub Repository: \033[4mhttps://github.com/Linus-Shyu/AT-Tool\033[0m"
-            )
-            print(
-                "Developer Bilibili: \033[4mhttps://space.bilibili.com/411591950\033[0m"
-            )
-            print("Developer YouTube: \033[4mhttps://www.youtube.com/@LinusShyu\033[0m")
-            print(" ")
-            print(" ")
-            print("----------------------------------------------------")
-            print(
-                "\033[38;2;255;215;0mBNB Chain support:https://xterminalapp.github.io/BNB/\033[0m"
-            )
-            print("----------------------------------------------------")
-            print(" ")
-            print(" ")
+                    print(
+                        "GitHub Repository: \033[4mhttps://github.com/Linus-Shyu/AT-Tool\033[0m"
+                    )
+                    print(
+                        "Developer Bilibili: \033[4mhttps://space.bilibili.com/411591950\033[0m"
+                    )
+                    print("Developer YouTube: \033[4mhttps://www.youtube.com/@LinusShyu\033[0m")
+                    print(" ")
+                    print(" ")
+                    print("----------------------------------------------------")
+                    print(
+                        "\033[38;2;255;215;0mBNB Chain support:https://xterminalapp.github.io/BNB/\033[0m"
+                    )
+                    print("----------------------------------------------------")
+                    print(" ")
+                    print(" ")
 
-            art_text = text2art("> ./hack.sh", font="random")
-            img = Image.new("RGB", (300, 300), "black")
-            draw = ImageDraw.Draw(img)
-            font = ImageFont.load_default()
+                    art_text = text2art("> ./hack.sh", font="random")
+                    img = Image.new("RGB", (300, 300), "black")
+                    draw = ImageDraw.Draw(img)
+                    font = ImageFont.load_default()
 
-            draw.text((10, 50), art_text, font=font, fill="cyan")
-            img.save("hacker_art.png")
-            open("./hacker_art.png")
+                    draw.text((10, 50), art_text, font=font, fill="cyan")
+                    img.save("hacker_art.png")
+                    open("./hacker_art.png")
 
-            url = "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd"
-            response = requests.get(url)
-            data = response.json()
+                    url = "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd"
+                    response = requests.get(url)
+                    data = response.json()
 
-            if "binancecoin" in data and "usd" in data["binancecoin"]:
-                price = data["binancecoin"]["usd"]
-                print(
-                    f"\033[32mBNB Price Now: \033[38;2;255;215;0m{price:.4f} USD\033[0m"
-                )
-            else:
-                print("\033[31mFailed to get the price of BNB\033[0m")
+                    if "binancecoin" in data and "usd" in data["binancecoin"]:
+                        price = data["binancecoin"]["usd"]
+                        print(
+                            f"\033[32mBNB Price Now: \033[38;2;255;215;0m{price:.4f} USD\033[0m"
+                        )
+                    else:
+                        print("\033[31mFailed to get the price of BNB\033[0m")
 
-        elif command == "exit":
-            confirm = console.input(
-                "[bright_red]Are you sure to close all web pages? (y/n): [/]"
-            )
-            if confirm.lower() == "y":
-                os.system("pkill Google Chrome")
-                break
-            if confirm.lower() == "n":
-                break
+                elif command == "exit":
+                    confirm = console.input(
+                        "[bright_red]Are you sure to close all web pages? (y/n): [/]"
+                    )
+                    if confirm.lower() == "y":
+                        os.system("pkill Google Chrome")
+                        break
+                    if confirm.lower() == "n":
+                        break
 
-        elif command == "help":
-            console.print("[bright_yellow]\nAvailable commands:[/]")
-            console.print("[bright_yellow]online     - Open online agent[/]")
-            console.print("[bright_yellow]agent      - Open local agent[/]")
-            console.print("[bright_yellow]home       - Open AtCoder home page[/]")
-            console.print("[bright_yellow]contest    - Open contests page[/]")
-            console.print("[bright_yellow]rank       - Open global rankings[/]")
-            console.print("[bright_yellow]userdata   - View user profile[/]")
-            console.print("[bright_yellow]play       - Open specific contest[/]")
-            console.print("[bright_yellow]task       - Open specific problem (a-g)[/]")
-            console.print("[bright_yellow]submit     - Open submission page[/]")
-            console.print("[bright_yellow]stand      - Open contest standings[/]")
-            console.print(
-                "[bright_yellow]code       - Create C++ template files for contest[/]"
-            )
-            console.print("[bright_yellow]clear      - Clear terminal screen[/]")
-            console.print("[bright_yellow]time       - Show current time[/]")
-            console.print("[bright_yellow]rating     - Show Codeforces rating graph[/]")
-            console.print("[bright_yellow]about      - Show about information[/]")
-            console.print("[bright_yellow]exit       - Exit the program[/]")
-            console.print("[bright_yellow]help       - Show this help message\n[/]")
+                elif command == "help":
+                    console.print("[bright_yellow]\nAvailable commands:[/]")
+                    console.print("[bright_yellow]online   - Open online agent[/]")
+                    console.print("[bright_yellow]agent    - Open local agent[/]")
+                    console.print("[bright_yellow]home       - Open AtCoder home page[/]")
+                    console.print("[bright_yellow]contest    - Open contests page[/]")
+                    console.print("[bright_yellow]rank       - Open global rankings[/]")
+                    console.print("[bright_yellow]userdata   - View user profile[/]")
+                    console.print("[bright_yellow]play       - Open specific contest[/]")
+                    console.print("[bright_yellow]task       - Open specific problem (a-g)[/]")
+                    console.print("[bright_yellow]submit     - Open submission page[/]")
+                    console.print("[bright_yellow]stand      - Open contest standings[/]")
+                    console.print(
+                        "[bright_yellow]code       - Create C++ template files for contest[/]"
+                    )
+                    console.print("[bright_yellow]clear      - Clear terminal screen[/]")
+                    console.print("[bright_yellow]time       - Show current time[/]")
+                    console.print("[bright_yellow]rating     - Show Codeforces rating graph[/]")
+                    console.print("[bright_yellow]about      - Show about information[/]")
+                    console.print("[bright_yellow]exit       - Exit the program[/]")
+                    console.print("[bright_yellow]help       - Show this help message\n[/]")
 
-        elif command == "rating":
-            username = console.input("[bright_white]Enter Codeforces username: [/]")
-            show_rating_history(username)
+                elif command == "rating":
+                    username = console.input("[bright_white]Enter Codeforces username: [/]")
+                    show_rating_history(username)
 
-        elif command.strip() == "":
-            continue
+                elif command.strip() == "":
+                    continue
 
-        elif command == "agent":
-            while True:
-                prompt = "[prompt]Ollama[/prompt] [agent]XTerminal Agent[/agent] [arrow]➜[/arrow] "
-                problem = Prompt.ask(prompt, console=console)
-                process = subprocess.Popen(
-                    ["ollama", "run", "llama3:8b-instruct-q4_0", problem],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True,
-                    bufsize=1,  # 行缓冲
-                    universal_newlines=True,
-                )
-                for line in process.stdout:
-                    rich.print(Markdown(line), end="")
-                if problem == "quit":
-                    break
+                elif command == "cls":
+                    os.system('cls' if os.name == 'nt' else 'clear')
 
-        elif command == "online":
-            os.system("./axec")
-            time.sleep(1)
-            # os.system("python3 '/Users/faxinxu/Downloads/XTerminal/agent.py'")
-        else:
-            console.print(
-                "[cyan]Command not found. Type 'help' for available commands.[/]"
-            )
+                elif command == "agent":
+                    while True:
+                        prompt = "[prompt]Ollama[/prompt] [agent]XTerminal Agent[/agent] [arrow]➜[/arrow] "
+                        problem = Prompt.ask(prompt, console=console)
+                        process = subprocess.Popen(
+                            ["ollama", "run", "llama3:8b-instruct-q4_0", problem],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            text=True,
+                            bufsize=1,  # 行缓冲
+                            universal_newlines=True,
+                        )
+                        for line in process.stdout:
+                            rich.print(Markdown(line), end="")
+                        if problem == "quit":
+                            break
+                else:
+                    console.print("[cyan]Command not found. Type 'help' for available commands.[/]")
+
+            except EOFError:  # Ctrl+D
+                console.print("\n[bright_yellow]Running axec command...[/]")
+                os.system("./axec")
+                continue
+            
+            except KeyboardInterrupt:  # Ctrl+C
+                console.print("\n[bright_red]Clearing screen...[/]")
+                os.system('cls' if os.name == 'nt' else 'clear')
+                continue
+
+    except KeyboardInterrupt:  # Outer Ctrl+C handler
+        console.print("\n[bright_red]Exiting program...[/]")
+        sys.exit(0)
 
 
 if __name__ == "__main__":
