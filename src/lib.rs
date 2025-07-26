@@ -1,7 +1,8 @@
-use std::process::Command;
-use std::process::exit;
+use std::fs;
+use std::process::{self, Command};
 
 use clap::Parser;
+use colored::*;
 use crossterm::style::Attribute::*;
 use crossterm::style::Color::*;
 use llm::LLMModel;
@@ -18,16 +19,18 @@ stream = false
 "#;
 
 pub const SYSTEM_PROMPT: &str = r#"You are a great helper for learning algorithms & CLI commands.
-Please fully use markdown format, algorithm name or command name must be the first line with '####', comments and unrelated statements must be commented.
-See the two example:
+Please fully use markdown format when outputing.
+Please put file name (the algorithm or command name user inputed) in the first single line, which must be fully lowercased with `_` inside.
+Statements and explanation must be commented.
 
+See the two example:
 ```shell
-# install_something_on_debian
-sudo apt install something
+# some_command
+sudo some_command
 ```
 
-```cpp
-// algorithm_name
+```somelanguage
+// algorithm_name.somelanguagesuffix
 int algorithm_name(const vector<int>& arr, int target) {
     ...
 }
@@ -59,7 +62,8 @@ pub fn run() -> anyhow::Result<String> {
     let mut messages = Vec::new();
     messages.push(Message::from_system(SYSTEM_PROMPT));
     let mut editor = rustyline::DefaultEditor::new()?;
-    println!("Axec: A CLI tool for learning algorithms & terminal commands.");
+    let start_text = "A CLI tool for learning algorithms & terminal commands.";
+    println!("Axec: {}", start_text.green().bold());
 
     let general = cli.get().expect("No LLM configured");
     let model_type: LLMModel = general.model_name.as_str().into();
@@ -71,7 +75,8 @@ pub fn run() -> anyhow::Result<String> {
             Ok(user_input) => match try_execute(user_input.trim()) {
                 Ok(output) => println!("{output}"),
                 Err(_err) => {
-                    println!("\nLooks like input is not a valid command, now sent it to LLM\n");
+                    let sent_to_llm = "Looks like input is not a valid command, now sent it to LLM";
+                    println!("\n{}\n", sent_to_llm.purple().bold());
                     if messages.len() > 1 {
                         messages.pop();
                     }
@@ -80,14 +85,18 @@ pub fn run() -> anyhow::Result<String> {
                         build_and_send_request(model_type, &general.api_key, &messages, stream);
                     let llm_reply = parse_response(model_type, response)?;
                     skin.print_text(&llm_reply);
+                    let algorithm_name = process_algorithm_competition(&llm_reply);
+                    fs::write(format!("{algorithm_name}.md"), &llm_reply).unwrap();
                 }
             },
             Err(ReadlineError::Eof) => {
-                println!("Exiting Axec\nBye Bye!");
-                exit(0)
+                let exit_text = "Exiting Axec\nBye Bye!";
+                println!("{}", exit_text.yellow().bold());
+                process::exit(0)
             }
             Err(ReadlineError::Interrupted) => {
-                println!("Use Control D to exit")
+                let interrupted_text = "Use Control D to exit";
+                println!("{}", interrupted_text.red().bold());
             }
             Err(_) => {
                 println!("Error reading input");
@@ -105,4 +114,21 @@ fn try_execute(line: &str) -> anyhow::Result<String> {
     let output = Command::new(cmd).args(args).output()?;
 
     Ok(String::from_utf8_lossy(&output.stdout).to_string())
+}
+
+// quick_srot
+// # quick_sort
+fn process_algorithm_competition(input: &str) -> String {
+    let input = input.trim().to_string();
+    let mut iter = input.lines();
+    iter.next().unwrap();
+    let second = iter.next().unwrap();
+
+    let ret = second.replace(['/', ' ', '#'], "");
+
+    if ret.is_empty() {
+        String::from("unknown_algorithm")
+    } else {
+        ret
+    }
 }
