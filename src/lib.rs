@@ -8,7 +8,7 @@ use crossterm::style::Color::*;
 use llm::LLMModel;
 use rustyline::error::ReadlineError;
 use termimad::rgb;
-use termimad::{CompoundStyle, MadSkin};
+use termimad::{CompoundStyle, MadSkin, Alignment};
 
 use crate::llm::{Message, build_and_send_request, parse_response};
 
@@ -53,6 +53,7 @@ pub fn run() -> anyhow::Result<String> {
     skin.set_fg(text_fg);
 
     skin.code_block.set_fg(code_fg);
+    skin.code_block.align = Alignment::Center;
     skin.inline_code.set_fg(code_fg);
 
     skin.italic.set_fg(Magenta);

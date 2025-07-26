@@ -32,16 +32,16 @@ def get_terminal_width():
         return 80
 
 
-lines = [
-    "\033[34m /$$       /$$\033[0m",
-    "\033[34m| $$      |__/\033[0m",
-    "\033[34m| $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ \033[0m",
-    "\033[34m| $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$\033[0m",
-    "\033[34m| $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$\033[0m",
-    "\033[34m| $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \033[0m",
-    "\033[34m|________/|__/|__/  |__/ \\_______/ \\_______/|__/ \033[0m",
-    "\033[32m            Developed by Linus Shyu \033[0m",
-]
+# lines = [
+#     "\033[34m /$$       /$$\033[0m",
+#     "\033[34m| $$      |__/\033[0m",
+#     "\033[34m| $$       /$$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ \033[0m",
+#     "\033[34m| $$      | $$| $$__  $$ /$$__  $$ |____  $$ /$$__  $$\033[0m",
+#     "\033[34m| $$      | $$| $$  | $$| $$_____/ /$$__  $$| $$\033[0m",
+#     "\033[34m| $$$$$$$$| $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \033[0m",
+#     "\033[34m|________/|__/|__/  |__/ \\_______/ \\_______/|__/ \033[0m",
+#     "\033[32m            Developed by Linus Shyu \033[0m",
+# ]
 
 
 def visible_length(s):
@@ -51,34 +51,34 @@ def visible_length(s):
     return len(ansi_escape.sub("", s))
 
 
-max_width = max(visible_length(line) for line in lines)
-terminal_width = get_terminal_width()
+# max_width = max(visible_length(line) for line in lines)
+# terminal_width = get_terminal_width()
 
 
-def display_at_position(padding):
-    clear_screen()
-    for line in lines:
-        print(" " * padding + line)
-    sys.stdout.flush()
-
-
-try:
-    for padding in range(0, terminal_width - max_width + 1):
-        display_at_position(padding)
-        time.sleep(0.05)
-
-    center_position = (terminal_width - max_width) // 2
-    for padding in range(terminal_width - max_width, center_position - 1, -1):
-        display_at_position(padding)
-        time.sleep(0.05)
-
-    display_at_position(center_position)
-
-except KeyboardInterrupt:
-    clear_screen()
-    for line in lines:
-        print(line)
-
+# def display_at_position(padding):
+#     clear_screen()
+#     for line in lines:
+#         print(" " * padding + line)
+#     sys.stdout.flush()
+# 
+# 
+# try:
+#     for padding in range(0, terminal_width - max_width + 1):
+#         display_at_position(padding)
+#         time.sleep(0.05)
+# 
+#     center_position = (terminal_width - max_width) // 2
+#     for padding in range(terminal_width - max_width, center_position - 1, -1):
+#         display_at_position(padding)
+#         time.sleep(0.05)
+# 
+#     display_at_position(center_position)
+# 
+# except KeyboardInterrupt:
+#     clear_screen()
+#     for line in lines:
+#         print(line)
+# 
 
 def get_user_rating(username):
     try:
