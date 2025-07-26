@@ -356,6 +356,8 @@ int main(void)
 
         elif command == "help":
             console.print("[bright_yellow]\nAvailable commands:[/]")
+            console.print("[bright_yellow]online   - Open online agent[/]")
+            console.print("[bright_yellow]agent    - Open local agent[/]")
             console.print("[bright_yellow]home       - Open AtCoder home page[/]")
             console.print("[bright_yellow]contest    - Open contests page[/]")
             console.print("[bright_yellow]rank       - Open global rankings[/]")
@@ -398,6 +400,10 @@ int main(void)
                 if problem == "quit":
                     break
 
+        elif command == "online":
+            os.system("./axec")
+            time.sleep(1)
+            os.system("python3 '/Users/faxinxu/Downloads/XTerminal/agent.py'")
         else:
             console.print(
                 "[cyan]Command not found. Type 'help' for available commands.[/]"
