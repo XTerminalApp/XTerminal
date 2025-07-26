@@ -408,7 +408,6 @@ int main(void)
                     console.print("[cyan]Command not found. Type 'help' for available commands.[/]")
 
             except EOFError:  # Ctrl+D
-                console.print("\n[bright_yellow]Running axec command...[/]")
                 os.system("./axec")
                 continue
             

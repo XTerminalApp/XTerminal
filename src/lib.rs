@@ -63,8 +63,6 @@ pub fn run() -> anyhow::Result<String> {
     let mut messages = Vec::new();
     messages.push(Message::from_system(SYSTEM_PROMPT));
     let mut editor = rustyline::DefaultEditor::new()?;
-    let start_text = "A CLI tool for learning algorithms & terminal commands.";
-    println!("Axec: {}", start_text.green().bold());
 
     let general = cli.get().expect("No LLM configured");
     let model_type: LLMModel = general.model_name.as_str().into();
